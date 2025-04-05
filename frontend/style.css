@@ -1,0 +1,222 @@
+/* frontend/style.css - v7 (Без призрака, с Настройками) */
+
+:root {
+    --board-size: 8;
+    --cell-size: min(10vw, 40px);
+    --board-bg: #2c3e50;
+    --cell-bg: #34495e; /* Фон пустой ячейки */
+    --cell-border: #4a627a;
+    --piece-pool-bg: rgba(44, 62, 80, 0.6);
+    --text-color: #ecf0f1;
+    --score-color: #f1c40f;
+    --body-bg: #1e2a38;
+    --modal-bg: rgba(0, 0, 0, 0.7);
+    --modal-content-bg: #34495e;
+    --button-primary-bg: var(--color-3);
+    --button-primary-shadow: var(--color-3-dark);
+    --button-secondary-bg: var(--color-1);
+    --button-secondary-shadow: var(--color-1-dark);
+    --toggle-bg-off: #7f8c8d;
+    --toggle-bg-on: var(--color-3);
+    --toggle-knob-color: #fff;
+    /* Для 3D эффекта */
+    --block-shadow-color: rgba(0, 0, 0, 0.3);
+    --block-highlight-color: rgba(255, 255, 255, 0.1);
+    /* Цвета блоков и их темные варианты */
+    --color-1: #e74c3c; --color-1-dark: #c0392b;
+    --color-2: #3498db; --color-2-dark: #2980b9;
+    --color-3: #2ecc71; --color-3-dark: #27ae60;
+    --color-4: #f1c40f; --color-4-dark: #f39c12;
+    --color-5: #9b59b6; --color-5-dark: #8e44ad;
+    --color-6: #e67e22; --color-6-dark: #d35400;
+    --color-7: #1abc9c; --color-7-dark: #16a085;
+    /* Дополнительные темные для теней */
+    --color-1-shadow: #a0342b;
+    --color-2-shadow: #2471a3;
+    --color-3-shadow: #229954;
+    --color-4-shadow: #ca6f1e;
+    --color-5-shadow: #7d3c98;
+    --color-6-shadow: #ba4a00;
+    --color-7-shadow: #117a65;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--body-bg); color: var(--text-color);
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 10px;
+    user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+    overscroll-behavior-y: contain; overflow: hidden;
+}
+
+#game-container {
+    display: flex; flex-direction: column; align-items: center;
+    width: 100%; max-width: calc(var(--cell-size) * var(--board-size) + 60px);
+    height: 100%;
+    overflow: hidden;
+}
+
+#game-header {
+    width: 100%; text-align: center; margin-bottom: 10px;
+    display: flex; flex-direction: column; align-items: center;
+    flex-shrink: 0;
+}
+
+/* Обновленные стили для блока с очками и кнопками */
+.scores {
+    display: flex; justify-content: space-between; align-items: center;
+    background-color: var(--board-bg); padding: 8px 10px; /* Немного уменьшил боковые паддинги */
+    border-radius: 8px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3); width: 100%; max-width: 340px; /* Немного шире для кнопок */
+}
+.score-box { text-align: center; flex-basis: 35%; /* Даем место по краям */ }
+.score-box-left { text-align: left; }
+.score-box-right { text-align: right; }
+.score-label { display: block; font-size: 0.7em; /* Чуть меньше */ color: #bdc3c7; margin-bottom: 2px; }
+#current-score, #high-score { font-size: 1.2em; /* Чуть меньше */ font-weight: bold; color: var(--score-color); }
+
+.header-buttons { /* Контейнер для кнопок по центру */
+    display: flex; justify-content: center; align-items: center;
+    flex-basis: 30%; /* Место для кнопок */
+}
+.header-button {
+    padding: 5px; /* Уменьшил паддинг */
+    font-size: 1.3em; /* Оставил размер иконки */
+    line-height: 1; background-color: transparent;
+    border: none; color: var(--text-color); box-shadow: none; margin: 0 3px; /* Меньше отступ */
+    cursor: pointer; transition: transform 0.1s ease, background-color 0.2s ease;
+    border-radius: 5px; /* Небольшое скругление для ховера */
+}
+.header-button:hover { background-color: rgba(255, 255, 255, 0.1); }
+.header-button:active { transform: scale(0.9); }
+
+/* --- Остальные стили без изменений до Призрака --- */
+
+/* Обертка для позиционирования поля и комбо */
+#game-board-wrapper {
+    position: relative; margin-bottom: 15px; flex-shrink: 0;
+}
+
+#game-board {
+    display: grid;
+    grid-template-columns: repeat(var(--board-size), var(--cell-size));
+    grid-template-rows: repeat(var(--board-size), var(--cell-size));
+    gap: 1px; background-color: var(--board-bg); padding: 4px;
+    border: 2px solid var(--cell-border); border-radius: 5px; position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.cell { background-color: var(--cell-bg); border-radius: 3px; position: relative; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 1px 1px var(--block-highlight-color), inset 0 -1px 1px var(--block-shadow-color); z-index: 1; }
+.cell.filled { border-radius: 3px; position: relative; background-color: var(--block-color, gray); box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), inset 1px 1px 1px var(--block-highlight-color), inset -1px -1px 1px var(--block-shadow-color-dark, var(--block-shadow-color)); z-index: 2; }
+.cell.filled::after { content: ''; position: absolute; left: 3px; right: 3px; bottom: -3px; height: 3px; background-color: var(--block-color-shadow, black); border-radius: 0 0 3px 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+.cell.filled[data-color="1"] { --block-color: var(--color-1); --block-color-dark: var(--color-1-dark); --block-color-shadow: var(--color-1-shadow); }
+.cell.filled[data-color="2"] { --block-color: var(--color-2); --block-color-dark: var(--color-2-dark); --block-color-shadow: var(--color-2-shadow); }
+.cell.filled[data-color="3"] { --block-color: var(--color-3); --block-color-dark: var(--color-3-dark); --block-color-shadow: var(--color-3-shadow); }
+.cell.filled[data-color="4"] { --block-color: var(--color-4); --block-color-dark: var(--color-4-dark); --block-color-shadow: var(--color-4-shadow); }
+.cell.filled[data-color="5"] { --block-color: var(--color-5); --block-color-dark: var(--color-5-dark); --block-color-shadow: var(--color-5-shadow); }
+.cell.filled[data-color="6"] { --block-color: var(--color-6); --block-color-dark: var(--color-6-dark); --block-color-shadow: var(--color-6-shadow); }
+.cell.filled[data-color="7"] { --block-color: var(--color-7); --block-color-dark: var(--color-7-dark); --block-color-shadow: var(--color-7-shadow); }
+.cell.clearing { animation: clearAnimation 0.3s ease-out forwards; }
+@keyframes clearAnimation { 0% { transform: scale(1.05); opacity: 1; filter: brightness(1.2); box-shadow: 0 0 10px 5px var(--block-color, white); } 100% { transform: scale(0.5); opacity: 0; filter: brightness(1.5); box-shadow: 0 0 0 0 var(--block-color, white); } }
+
+/* --- СТИЛИ ПРИЗРАКА УДАЛЕНЫ --- */
+
+/* --- Остальные стили без изменений до Модалок --- */
+#piece-pool-container { width: 100%; background-color: var(--piece-pool-bg); padding: 5px 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); margin-bottom: 10px; flex-shrink: 0; }
+#piece-pool { display: flex; justify-content: space-around; align-items: center; min-height: calc(var(--cell-size) * 3 + 10px); }
+.piece-preview-wrapper { display: flex; justify-content: center; align-items: center; padding: 5px; }
+.piece { display: grid; gap: 1px; position: relative; transform-origin: center center; }
+#piece-pool .piece { cursor: grab; touch-action: none; transform: scale(0.9); transition: transform 0.1s ease-out, opacity 0.2s ease-out; }
+#piece-pool .piece:active { cursor: grabbing; transform: scale(0.85); }
+#drag-clone { position: absolute; pointer-events: none; z-index: 1000; opacity: 0.85; transform: scale(1.0); }
+.piece-block { width: var(--cell-size); height: var(--cell-size); background-color: var(--block-color, gray); border-radius: 3px; position: relative; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1), inset 1px 1px 1px var(--block-highlight-color), inset -1px -1px 1px var(--block-shadow-color-dark, var(--block-shadow-color)); }
+.piece-block::after { content: ''; position: absolute; left: 3px; right: 3px; bottom: -3px; height: 3px; background-color: var(--block-color-shadow, black); border-radius: 0 0 3px 3px; box-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+#drag-clone .piece-block::after { display: none; }
+.piece-block[data-color="1"] { --block-color: var(--color-1); --block-color-dark: var(--color-1-dark); --block-color-shadow: var(--color-1-shadow); }
+.piece-block[data-color="2"] { --block-color: var(--color-2); --block-color-dark: var(--color-2-dark); --block-color-shadow: var(--color-2-shadow); }
+.piece-block[data-color="3"] { --block-color: var(--color-3); --block-color-dark: var(--color-3-dark); --block-color-shadow: var(--color-3-shadow); }
+.piece-block[data-color="4"] { --block-color: var(--color-4); --block-color-dark: var(--color-4-dark); --block-color-shadow: var(--color-4-shadow); }
+.piece-block[data-color="5"] { --block-color: var(--color-5); --block-color-dark: var(--color-5-dark); --block-color-shadow: var(--color-5-shadow); }
+.piece-block[data-color="6"] { --block-color: var(--color-6); --block-color-dark: var(--color-6-dark); --block-color-shadow: var(--color-6-shadow); }
+.piece-block[data-color="7"] { --block-color: var(--color-7); --block-color-dark: var(--color-7-dark); --block-color-shadow: var(--color-7-shadow); }
+
+/* --- Общие стили модальных окон --- */
+.modal { position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: var(--modal-bg); display: flex; justify-content: center; align-items: flex-start; z-index: 100; opacity: 0; transition: opacity 0.3s ease-in-out; pointer-events: none; overflow-y: auto; }
+.modal:not(.hidden) { opacity: 1; pointer-events: auto; }
+.modal.modal-raised { padding-top: 15vh; }
+.modal-content { background-color: var(--modal-content-bg); padding: 20px 25px; border-radius: 10px; text-align: center; color: var(--text-color); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); width: 85%; max-width: 380px; margin-bottom: 5vh; }
+.modal:not(.hidden) .modal-content { transform: scale(1); }
+.modal h2 { margin-bottom: 20px; color: var(--score-color); font-size: 1.5em; }
+
+/* --- Специфичные стили модалок --- */
+/* Game Over */
+#game-over-modal .final-scores { margin-bottom: 20px; }
+#game-over-modal p { margin: 5px 0; font-size: 1.1em; }
+#game-over-modal .final-highscore { font-size: 0.9em; opacity: 0.8; }
+#final-score, #final-highscore-value { font-weight: bold; color: var(--score-color); }
+
+/* Leaderboard */
+.leaderboard-content { max-height: 60vh; display: flex; flex-direction: column; }
+#leaderboard-list { margin-bottom: 15px; overflow-y: auto; text-align: left; border: 1px solid var(--cell-border); border-radius: 5px; padding: 5px 10px; background-color: rgba(0, 0, 0, 0.1); flex-grow: 1; min-height: 100px; }
+.leaderboard-entry { display: flex; justify-content: space-between; align-items: center; padding: 6px 5px; border-bottom: 1px solid var(--cell-border); font-size: 0.9em; }
+.leaderboard-entry:last-child { border-bottom: none; }
+.leaderboard-entry .rank { font-weight: bold; min-width: 30px; text-align: right; margin-right: 8px; color: var(--score-color); }
+.leaderboard-entry .name { flex-grow: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 8px; }
+.leaderboard-entry .score { font-weight: bold; color: var(--score-color); min-width: 40px; text-align: right; }
+.leaderboard-loading, .leaderboard-error, .leaderboard-empty { text-align: center; padding: 15px; color: #bdc3c7; font-style: italic; }
+
+/* НОВОЕ: Settings */
+.settings-content { max-width: 320px; } /* Настройки обычно не широкие */
+.settings-options { margin-bottom: 25px; text-align: left; }
+.setting-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--cell-border);
+    font-size: 1.0em; cursor: pointer;
+}
+.setting-item:last-child { border-bottom: none; }
+.setting-item span { margin-right: 15px; }
+
+/* Стилизация чекбокса как переключателя */
+.toggle-switch {
+    appearance: none; -webkit-appearance: none; -moz-appearance: none;
+    width: 40px; height: 22px; background-color: var(--toggle-bg-off);
+    border-radius: 11px; position: relative; cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    flex-shrink: 0; /* Не сжиматься */
+}
+.toggle-switch::before {
+    content: ''; position: absolute;
+    width: 18px; height: 18px; border-radius: 50%;
+    background-color: var(--toggle-knob-color);
+    top: 2px; left: 2px;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.toggle-switch:checked { background-color: var(--toggle-bg-on); }
+.toggle-switch:checked::before { transform: translateX(18px); }
+
+/* --- Общие стили кнопок и скрытых элементов --- */
+button { padding: 10px 20px; font-size: 1em; font-weight: bold; cursor: pointer; border: none; border-radius: 8px; background-color: var(--button-primary-bg); color: white; transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.1s ease; box-shadow: 0 3px 0 var(--button-primary-shadow), 0 4px 5px rgba(0,0,0,0.3); margin-top: 10px; }
+button:hover { filter: brightness(1.1); }
+button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--button-primary-shadow), 0 2px 3px rgba(0,0,0,0.3); }
+
+/* Кнопки закрытия модалок */
+#leaderboard-close-button, #settings-close-button {
+    background-color: var(--button-secondary-bg);
+    box-shadow: 0 3px 0 var(--button-secondary-shadow), 0 4px 5px rgba(0,0,0,0.3);
+    align-self: center;
+}
+#leaderboard-close-button:hover, #settings-close-button:hover { background-color: #ec7063; filter: brightness(1.1); }
+#leaderboard-close-button:active, #settings-close-button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--button-secondary-shadow), 0 2px 3px rgba(0,0,0,0.3); }
+
+
+.hidden { display: none !important; }
+#piece-pool .piece.disabled { opacity: 0.4 !important; cursor: not-allowed; pointer-events: none; transform: scale(0.8); }
+
+/* --- Анимация Комбо --- */
+#combo-animation-container { position: absolute; top: 25%; left: 0; right: 0; z-index: 50; pointer-events: none; text-align: center; }
+.combo-text { display: inline-block; font-size: 2.8em; font-weight: bold; color: #fff; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, 4px 4px 6px rgba(0,0,0,0.6); opacity: 0; animation: comboPulse 0.9s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards; }
+.combo-text.combo-2 { color: var(--color-2); } .combo-text.combo-3 { color: var(--color-3); } .combo-text.combo-4 { color: var(--color-4); } .combo-text.combo-5 { color: var(--color-5); } .combo-text.combo-6 { color: var(--color-6); } .combo-text.combo-7 { color: var(--color-7); }
+@keyframes comboPulse { 0% { opacity: 0.5; transform: scale(0.5); } 40% { opacity: 1; transform: scale(1.15); } 70% { transform: scale(0.95); } 100% { opacity: 0; transform: scale(0.9); } }

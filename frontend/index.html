@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>BlockBlast Game</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="game-container">
+        <header id="game-header">
+            <!-- Обновленный блок со счетами и кнопками -->
+            <div class="scores">
+                <div class="score-box score-box-left">
+                    <span class="score-label">Счет</span>
+                    <span id="current-score">0</span>
+                </div>
+                <div class="header-buttons">
+                    <button id="leaderboard-button" class="header-button" title="Таблица лидеров">🏆</button>
+                    <button id="settings-button" class="header-button" title="Настройки">⚙️</button>
+                </div>
+                <div class="score-box score-box-right">
+                    <span class="score-label">Рекорд</span>
+                    <span id="high-score">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Обертка для поля и комбо -->
+        <div id="game-board-wrapper">
+            <div id="game-board">
+                <!-- Игровое поле будет сгенерировано JavaScript -->
+                <!-- Элемент ПРИЗРАКА УДАЛЕН -->
+            </div>
+             <!-- Контейнер для анимаций комбо -->
+            <div id="combo-animation-container"></div>
+        </div>
+
+        <!-- Пул фигур -->
+        <div id="piece-pool-container">
+            <div id="piece-pool">
+                <!-- Фигуры для выбора -->
+            </div>
+        </div>
+
+         <!-- Кнопка для перезапуска вне модалки (пока скрыта) -->
+         <button id="restart-button" class="hidden">Играть снова</button>
+
+    </div>
+
+    <!-- Модальное окно Game Over -->
+    <div id="game-over-modal" class="modal modal-raised hidden">
+        <div class="modal-content">
+            <h2>Игра окончена!</h2>
+            <div class="final-scores">
+                <p>Результат: <span id="final-score">0</span></p>
+                <p class="final-highscore">Рекорд: <span id="final-highscore-value">0</span></p>
+            </div>
+            <button id="modal-restart-button">Снова!</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно Таблицы Лидеров -->
+    <div id="leaderboard-modal" class="modal modal-raised hidden">
+        <div class="modal-content leaderboard-content">
+            <h2>🏆 Таблица Лидеров</h2>
+            <div id="leaderboard-list">
+                <p class="leaderboard-loading">Загрузка...</p>
+            </div>
+            <button id="leaderboard-close-button">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- НОВОЕ: Модальное окно Настроек -->
+    <div id="settings-modal" class="modal modal-raised hidden">
+        <div class="modal-content settings-content">
+            <h2>⚙️ Настройки</h2>
+            <div class="settings-options">
+                <label class="setting-item" for="sound-toggle-checkbox">
+                    <span>Звуковые эффекты</span>
+                    <input type="checkbox" id="sound-toggle-checkbox" class="toggle-switch">
+                </label>
+                <!-- Сюда можно добавить другие настройки в будущем -->
+            </div>
+            <button id="settings-close-button">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Элемент для перетаскиваемой фигуры (клон) -->
+    <div id="drag-clone" class="piece hidden"></div>
+
+    <!-- Аудио элементы (остаются) -->
+    <audio id="audio-place" src="sounds/place.wav" preload="auto"></audio>
+    <audio id="audio-clear" src="sounds/clear.wav" preload="auto"></audio>
+    <audio id="audio-combo" src="sounds/combo.wav" preload="auto"></audio>
+    <audio id="audio-gameover" src="sounds/gameover.wav" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
